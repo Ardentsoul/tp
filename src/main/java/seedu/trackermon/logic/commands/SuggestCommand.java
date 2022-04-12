@@ -7,8 +7,8 @@ import java.util.Random;
 
 import seedu.trackermon.logic.commands.exceptions.CommandException;
 import seedu.trackermon.model.Model;
+import seedu.trackermon.model.show.SameShowPredicate;
 import seedu.trackermon.model.show.Show;
-import seedu.trackermon.model.show.SuggestPredicate;
 
 /**
  * Returns a random Show from the displayed list.
@@ -33,7 +33,7 @@ public class SuggestCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Show> currList = model.getFilteredShowList();
-        Integer sizeOfShowList = currList.size();
+        int sizeOfShowList = currList.size();
 
         if (sizeOfShowList <= 0) {
             throw new CommandException(MESSAGE_FAILURE_NO_SHOWS);
@@ -42,16 +42,16 @@ public class SuggestCommand extends Command {
             throw new CommandException(MESSAGE_FAILURE_ONE_SHOW);
         }
         Show randomShow = getRandomShow(model);
-        SuggestPredicate suggestPredicate = new SuggestPredicate(randomShow);
-        model.updateFilteredShowList(suggestPredicate);
+        SameShowPredicate sameShowPredicate = new SameShowPredicate(randomShow);
+        model.updateFilteredShowList(sameShowPredicate);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 
     private static Show getRandomShow(Model model) {
         Random rn = new Random();
         List<Show> currList = model.getFilteredShowList();
-        Integer sizeOfShowList = currList.size();
-        Integer randomIndex = rn.nextInt(sizeOfShowList);
+        int sizeOfShowList = currList.size();
+        int randomIndex = rn.nextInt(sizeOfShowList);
         return currList.get(randomIndex);
     }
 }
